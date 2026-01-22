@@ -1,4 +1,4 @@
-# **Open Neuromorphic (ONM) Organisational Charter (v2.7)**
+# **Open Neuromorphic (ONM) Organisational Charter**
 
 ## Preamble
 Open Neuromorphic (ONM) is a global, open-source community fostering collaboration, knowledge sharing, and innovation in neuromorphic computing. Our mission is to build a thriving network of contributors by organizing talks, discussions, and hackathons that advance the state of the art.
