@@ -28,6 +28,8 @@ ONM is led by a **Core Leadership Team** composed of three officers:
 
 Each officer serves a **1-year term**, with new elections taking place at the conclusion of each term. Officers may be re-elected.
 
+The three office positions (and any subsequent ones) in the Core Leadership Team will be **unpaid** in perpetuity. The EC office positions are purely voluntary and honorary, and the office holders will be rewarded with recognition of their service.
+
 ## Membership
 
 Membership in Open Neuromorphic (ONM) is open to all individuals who support its mission and values.
