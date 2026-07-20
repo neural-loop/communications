@@ -26,7 +26,7 @@ ONM is led by a **Core Leadership Team** composed of three officers:
 
 * **Secretary**: Maintains records, documents meetings, manages internal communication, and facilitates elections and administrative processes.
 
-Each officer serves a **1-year term**, with new elections taking place at the conclusion of each term. Officers may be re-elected.
+Each officer serves a **1-year term**, with new elections taking place at the conclusion of each term. Officers may be re-elected. Officers are elected from the active member pool.
 
 ## Membership
 
@@ -108,7 +108,7 @@ ONM maintains a Code of Conduct that outlines expectations for respectful partic
 
 ## Adoption of the Charter
 
-This charter was adopted on \[Insert Date\] to formalise the structure and guiding principles of Open Neuromorphic. It reflects our commitment to an open, dynamic, and inclusive community.
+This charter was adopted on [Insert Date] to formalise the structure and guiding principles of Open Neuromorphic. It reflects our commitment to an open, dynamic, and inclusive community.
 
 **Signed:**
 
