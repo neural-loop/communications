@@ -1,320 +1,189 @@
-# Zero to Silicon
+# Zero to Silicon (Z2S)
 ## Build Your Own Spiking Digital Hardware
-**Summer Workshop Series | Open Neuromorphic**
-
-*Series Planning Document | June 2026 Draft*
-
-## Series Overview
-
-Zero to Silicon is a step-by-step public educational track that takes a software engineer or student from zero hardware background to simulating a digital spiking neuron chip. The series is organized as a summer workshop: each event opens with a 60-minute live talk from a domain expert, followed by interactive demos and a structured activity block. All materials are released as Open Educational Resources (OER).
-
-**Track name:** Zero to Silicon  
-**Format:** Live online workshop — talk (60 min) + activities (60 min)  
-**Audience:** Software engineers, students, and researchers with limited hardware background  
-**Total events:** 6 sessions  
-**Timing:** Summer 2026 (dates TBD per speaker availability)  
-**Materials:** All content released as OER — free to use, share, and cite  
-**Platform:** Discord (async challenges + community) + live streaming (talk + Q&A)
-
-## Event Overview
-
-The six events form a continuous curriculum. Each event builds directly on the one before it, culminating in a full simulation of the spiking neuron chip designed across the series.
-
-| # | Event | Status | Speaker | Hosts |
-| :--- | :--- | :--- | :--- | :--- |
-| **1** | Neuroscience Foundations for Neuromorphic Computation | **Recruiting speaker** | TBD | Rayane / Jose (neuroscientist) |
-| **2** | Prototyping an LIF Neuron in Python | **Needs Scheduling** | Jason Eshraghian (@jasnn) | Effiong / Erastus |
-| **3** | Fundamentals of Digital Logic for Neuromorphic Engineering | **Idea Phase** | Fabrizio Otto | Jose / Erastus |
-| **4** | Design the Digital Spiking Chip | **Idea Phase** | TBD | Jose / Erastus |
-| **5** | Intro to Verilog & Hardware Description | **Idea Phase** | Dmitri (Neucom) | Jose / Erastus |
-| **6** | Simulating the Spiking Neuron Chip with Verilator | **Idea Phase** | TBD (cont. from Ev. 5) | Jose / Erastus |
-
-## Workshop Format
-
-Every event follows the same two-hour structure. The first hour is a live talk by a domain expert. The second hour is a hands-on activity block — demos, workshops, or coding challenges — facilitated by the ONM team. After the live session closes, a multi-day async challenge runs in Discord with team support.
-
-### Standard session structure
-
-| Time | Block | Description |
-| :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk (60 min)** | Speaker presents the session topic. ONM team hosts. Live demos run in parallel in the browser for participants to follow. |
-| **1:00 – 1:15** | **Live Q&A (15 min)** | Audience questions answered by speaker alongside the ONM team. |
-| **1:15 – 1:50** | **Activity Block (35 min)** | Hands-on: demo exploration, coding exercise, or design workshop. Format varies by session (see individual event plans). |
-| **1:50 – 2:00** | **Challenge Kickoff (10 min)** | Teams form, problem sets distributed, async challenge launched in Discord. |
-| **Post-event** | **Async Discord Challenge** | Multi-day challenge with async support from ONM team. Participants share solutions, ask questions, get feedback. |
+**Curriculum Architecture & Syllabus Specification | Open Neuromorphic**
 
 ---
 
-## Event 1 — Neuroscience Foundations for Neuromorphic Computation
-**Status:** Recruiting speaker  
-**Hosts:** Rayane Rocha / Jose  
+## 1. Curriculum Overview
 
-**Producers:**
-*   Technical logistics / streaming
-*   Challenge host
-*   Challenge helpers (?)
-*   Browser demos? (Hosted on ONM if possible? What are the constituent parts of demos/where do we find this info - I think we plan to roll this out in the discord resource threads)
+**Zero to Silicon (Z2S)** is a self-paced, open-access educational track designed to guide software engineers, students, and computational researchers from zero hardware background to designing, coding, and simulating a synthesizable digital spiking neuron chip.
 
-**Speaker:** TBD — seeking a neuroscientist comfortable with hardware bridges  
-**Contact for speaker recruitment:** rayanerocha090@gmail.com  
+The curriculum is structured as a **cloud-native, asynchronous program modeled after Neuromatch Academy (NMA)**. Every module runs directly inside Google Colab without requiring local EDA tool installations, supported by short modular concept videos and asynchronous Discord co-working spaces.
 
-### Objective
-Build the vocabulary and intuition that every later event depends on. Participants should leave understanding what a neuron is as a dynamical system, why the LIF model is used instead of Hodgkin-Huxley for hardware, and how biological concepts map to chip design constraints.
+* **Format:** Modular Asynchronous Curriculum (Pre-recorded Concept Videos + Interactive Google Colab Notebooks + Discord Co-Working).
+* **Target Audience:** Software engineers, neuroscientists, ML researchers, and students with basic Python knowledge and no prior hardware engineering background.
+* **Curriculum Scope:** 5 Core Modules (`W1D1` through `W1D5`).
+* **License:** Open Educational Resources (OER) under **CC-BY-SA 4.0** (content) and **MIT** (code).
+* **Primary Platform:** `open-neuromorphic/course-content` (JupyterBook / Google Colab) + Discord (`#zero-to-silicon` & `🔊 Z2S Working Lounge`).
 
-### Talk outline (draft)
-A full outline with speaker notes is available at: `docs.google.com/document/d/1KL1woFMM-Eyn8-DVVWEm7xz12keCAYdTUvAJPwR2HRk`
+---
 
-| Time | Topic | Duration | Key points | Neuromorphic bridge |
-| :--- | :--- | :--- | :--- | :--- |
-| **T+0** | **What is a neuron?** | 6 min | Action potential, membrane potential, resting potential, leak conductance, threshold, reset. Spike as discrete event. Dendrites, soma, axon. | *Sparsity, asynchrony, communication efficiency* |
-| **T+6** | **Excitable membranes** | 8 min | Why the membrane leaks. LIF model: leak, integration, threshold, reset. The time constant. | *Four parameters capture most interesting behavior* |
-| **T+14** | **Biophysical spike generation** | 8 min | Action potential internal structure. Hodgkin-Huxley as feedback system. Na+ and K+. | *HH vs LIF: why we choose LIF for hardware* |
-| **T+22** | **Synaptic communication** | 8 min | Synapse: weights, delay, temporal summation, coincidence detection. Excitatory vs inhibitory. | *How the synapse maps to hardware* |
-| **T+30** | **Excitation and inhibition** | 8 min | E/I balance in depth. Oscillatory regimes, no clock needed. | *Stability constraints in hardware* |
-| **T+38** | **Abstraction for neuromorphic systems** | 7 min | What HH has that LIF drops; when that matters. Four things worth keeping. Brief Loihi/SpiNNaker mention. | *What did we preserve? What did we simplify?* |
+## 2. Pedagogical Architecture
 
-### Activity block
+Each module is structured around three core learning components:
 
-| Time | Activity | Description | Format / Tool |
+```
+                  MODULAR NMA-STYLE LEARNING CYCLE
+
+┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐
+│  1. Micro-Lecture      │ ──►  │  2. Interactive Colab  │ ──►  │  3. Async Discord Lab  │
+│  (10–15 min Video)     │      │  (Zero-Install Code)   │      │  (Co-Working & Feedback)│
+└────────────────────────┘      └────────────────────────┘      └────────────────────────┘
+```
+
+1. **Pre-Recorded Micro-Lectures (10–15 mins):** Focused conceptual walkthroughs by domain experts explaining theoretical foundations, hardware bridges, and design tradeoffs.
+2. **Interactive Google Colab Notebooks:** Browser-based hands-on tutorials with inline exercises. All hardware tools (`verilator`, `iverilog`) install on-demand in the Colab container.
+3. **Artifact-Driven Progression:** Every module produces a tangible artifact (e.g., a Python reference class, a gate mapping table, a lint-clean Verilog module, or a simulation waveform). Each artifact forms the exact design input for the subsequent module.
+4. **Asynchronous Community Co-Working:** Hands-on peer support via Discord voice lounges and weekly async show-and-tell threads.
+
+---
+
+## 3. The 5-Module Syllabus
+
+```
+                THE ZERO TO SILICON ARTIFACT PIPELINE
+
+[ W1D1: Biology & Math ] ──► [ W1D2: Python Reference ] ──► [ W1D3: Logic Mapping ]
+Voltage Trace Spec           LIFNeuron Class               Gate & Bit-Width Plan
+│
+▼
+[ Capstone Parity Check ] ◄── [ W1D5: Simulation/Waves ] ◄── [ W1D4: Verilog RTL ]
+HW vs SW % Error             Waveform Plots                Synthesizable Module
+```
+
+| Module | Title | Primary Artifact Produced | Technical Stack |
 | :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Neuroscience foundations: neurons, LIF model, synapses, E/I balance, neuromorphic bridges | Presenter + slides |
-| **1:00 – 1:15** | **Live Q&A** | Audience questions, answered by speaker + ONM team | Live (Discord stage / Zoom) |
-| **1:15 – 1:35** | **Interactive Demo** | Patch-clamp simulator and LIF visualizer — participants follow along in browser | Browser demo (linked in Discord) |
-| **1:35 – 2:00** | **Challenge Kickoff** | Introduce multi-day Discord challenge; teams form, problem sets distributed | Discord + shared doc |
-| **Post-event** | **Async Challenge** | Multi-day problem set in Discord; participants solve neuroscience + LIF questions with async team support | Discord threads |
-
-### Action items
-*   Recruit neuroscientist speaker — contact rayanerocha090@gmail.com
-*   Finalize talk outline with speaker (2 prep calls estimated)
-*   Build / source patch-clamp simulator and LIF visualizer for demo block
-*   Write Discord challenge problem set based on talk topics
-*   Schedule event date (target: Summer 2026, flexible to speaker)
+| **W1D1** | **Biological & Conceptual Foundations** | Annotated neuron diagram + voltage trace | Python, NumPy, Matplotlib |
+| **W1D2** | **Python LIF Reference Modeling** | `lif_neuron.py` reference class + f-I curves | Python, NumPy, Matplotlib |
+| **W1D3** | **Digital Logic & Bit-Width Analysis** | Logic mapping table + block diagram + bit analysis | Markdown, Digital Logic Schematics |
+| **W1D4** | **Verilog Hardware Description** | Synthesizable, lint-clean `lif_neuron.v` | Verilog, Verilator (Colab inline) |
+| **W1D5** | **Verilator Simulation & Waveform Co-Design** | Testbench verification + Matplotlib waveform | C++/Python Testbench, Verilator, Matplotlib |
 
 ---
 
-## Event 2 — Prototyping an LIF Neuron in Python
-**Status:** Needs Scheduling  
-**Hosts:** Effiong / Erastus  
-**Speaker:** Jason Eshraghian (@jasnn) — to be confirmed for this specific session  
+### Module Details
 
-### Objective
-Define the mathematical model of a Leaky Integrate-and-Fire (LIF) neuron and build a reference Python implementation using snnTorch. Participants should leave able to write their own LIF class from scratch and understand the math that will later be converted to hardware.
-
-### Key takeaways
-*   Write a raw Python class that simulates membrane potential, leak, and spike threshold
-*   Understand the LIF equations that underpin every later hardware event
-*   Visualize spike trains from a real snnTorch simulation
-
-### Activity block
-
-| Time | Activity | Description | Format / Tool |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Math of the LIF model; build a reference implementation in Python using snnTorch | Presenter + Jupyter notebook |
-| **1:00 – 1:15** | **Live Q&A** | Questions from audience on snnTorch, coding, model parameters | Live (Discord stage / Zoom) |
-| **1:15 – 1:35** | **Demo: Brian 2** | Simulate a spiking neural network live using Brian 2 — watch spikes render in real time | Live screen share / Colab |
-| **1:35 – 2:00** | **Challenge Kickoff** | Build an LIF neuron class from scratch in snnTorch. Simulate membrane potential, leak, threshold, and spike. | GitHub repo + Discord |
-| **Post-event** | **Async Challenge** | Extended coding challenge in Discord. Participants submit working LIF implementations; team reviews async. | GitHub + Discord threads |
-
-### Action items
-*   Reach out to Jason Eshraghian to confirm interest and schedule a prep call
-*   Set up demo: Brian 2 spiking simulation (live screen share or Colab notebook)
-*   Create coding challenge: build an LIF neuron class in snnTorch from a template
-*   Prepare Jupyter notebooks for talk and activity block
+#### Module 1 (`W1D1`) — Biological & Conceptual Foundations
+* **Lead Contributors:** Rayane Rocha (`@peppermintcollie`), Bells (`@belleion_potatos`)
+* **Objective:** Establish the biophysical intuitions and mathematical vocabulary that govern neuromorphic engineering. Participants understand why leaky integration and discrete spike events provide extreme energy efficiency over traditional architectures.
+* **Topics Covered:**
+  * Neurons as dynamical systems: membrane potential ($V$), resting potential ($V_{reset}$), leak conductance, threshold ($V_{th}$).
+  * Biophysical action potentials vs. the Leaky Integrate-and-Fire (LIF) abstraction (why hardware builds LIF instead of Hodgkin-Huxley).
+  * Synaptic transmission: temporal summation, coincidence detection, and excitation/inhibition (E/I) balance.
+  * The Neuromorphic Bridge: mapping sparsity, asynchrony, and event-driven communication (AER) to silicon constraints.
+* **Colab Tutorial:** `tutorials/W1D1_NeuronFoundations/W1D1_Tutorial1.ipynb`
 
 ---
 
-## Event 3 — Fundamentals of Digital Logic for Neuromorphic Engineering
-**Status:** Idea Phase  
-**Hosts:** Jose / Erastus  
-**Speaker:** Fabrizio Otto  
-
-### Objective
-Give software engineers the EE 101 they need to follow the rest of the series. Participants should leave understanding how digital circuits represent math and biology, and be able to design a single-neuron signal using digital logic.
-
-### Key takeaways
-*   Logic gates, clock cycles, binary arithmetic — the basics relevant to neuromorphics
-*   How biological spikes are represented as digital signals (AER basics)
-*   Bridge: from spiking in Python to spiking in hardware
-
-### Activity block
-
-| Time | Activity | Description | Format / Tool |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Logic gates, clock cycles, digital signal representation, AER basics — EE 101 for software engineers | Presenter + slides |
-| **1:00 – 1:15** | **Live Q&A** | Questions on digital logic, signal encoding | Live |
-| **1:15 – 1:35** | **Demo** | Interactive logic gate simulator — participants design a basic spiking signal circuit | Browser / shared tool |
-| **1:35 – 2:00** | **Challenge Kickoff** | Design a simple AER-encoded spike signal on paper or in a simulator; share in Discord | Discord + pre-read resources |
-| **Post-event** | **Async Challenge** | Participants complete a logic design worksheet based on the talk | Discord threads |
-
-### Action items
-*   Events team: confirm Fabrizio Otto as speaker; arrange prep call
-*   Content team: compile a pre-read list from ONM educational resources
-*   Source or build an interactive logic gate simulator for the demo block
-*   Write AER encoding worksheet for async challenge
+#### Module 2 (`W1D2`) — Python LIF Reference Modeling
+* **Lead Contributors:** Erastus Toe (`@e_aurelius`), Jose Antonio (`@eljoserass`)
+* **Objective:** Implement the discrete-time LIF mathematical model from scratch in pure Python/NumPy without high-level ML frameworks. This code acts as the golden reference model for all downstream hardware verification.
+* **Topics Covered:**
+  * Discrete-time Euler integration of the LIF differential equation: $\Delta V = \frac{\Delta t}{\tau} (-(V - V_{reset}) + I_{in})$.
+  * State update, threshold crossing detection, and instantaneous reset mechanics.
+  * Simulating subthreshold integration vs. regular firing across variable current inputs ($I_{in}$).
+  * Generating frequency-current ($f\text{-}I$) response curves.
+* **Colab Tutorial:** `tutorials/W1D2_PythonLIFPrototyping/W1D2_Tutorial1.ipynb`
 
 ---
 
-## Event 4 — Design the Digital Spiking Chip
-**Status:** Idea Phase  
-**Hosts:** Jose / Erastus  
-**Speaker:** TBD  
-
-### Objective
-Translate the Python LIF model from Event 2 into a digital hardware design. Participants learn how to represent a neuron's behavior as a block diagram of digital logic components — the blueprint for the Verilog implementation in Event 5.
-
-### Key takeaways
-*   Map LIF equations to digital logic blocks (adders, registers, comparators)
-*   Understand the design choices that constrain a real chip (bit width, precision, area)
-*   Produce a block diagram that will be implemented in Verilog in Event 5
-
-### Activity block
-
-| Time | Activity | Description | Format / Tool |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Translate the Python LIF model into a digital logic design; introduce chip architecture concepts | Presenter + slides / whiteboard |
-| **1:00 – 1:15** | **Live Q&A** | Questions on chip design, logic-to-hardware translation | Live |
-| **1:15 – 1:50** | **Design Workshop** | Participants sketch their own LIF chip block diagram; team reviews and gives feedback | Shared doc / Miro / Discord |
-| **Post-event** | **Async Challenge** | Refine chip design based on feedback; submit to shared GitHub repo | GitHub + Discord |
-
-### Action items
-*   Events team: identify and recruit a speaker with chip design / digital systems background
-*   Prepare block diagram template for participants to complete during activity
-*   Set up shared design tool (Miro, Google Slides, or equivalent) for live collaboration
+#### Module 3 (`W1D3`) — Digital Logic Mapping & Bit-Width Analysis
+* **Lead Contributors:** Erastus Toe (`@e_aurelius`), Jose Antonio (`@eljoserass`)
+* **Objective:** Translate Python mathematical operations into digital hardware building blocks (registers, adders, subtractors, comparators, and multiplexers) and resolve hardware quantization constraints.
+* **Topics Covered:**
+  * Mapping software lines to digital logic primitives (e.g., `if V >= V_th` $\rightarrow$ comparator + multiplexer).
+  * Fixed-point arithmetic and integer offsets (eliminating negative voltage representations).
+  * Bit-width budget analysis: calculating necessary register widths for dynamic range and precision.
+  * Hardware optimization: replacing expensive multipliers with power-of-2 bit-shift approximations for decay factor $\frac{\Delta t}{\tau}$.
+* **Colab Tutorial:** `tutorials/W1D3_DigitalLogicMapping/W1D3_Tutorial1.ipynb`
 
 ---
 
-## Event 5 — Intro to Verilog & Hardware Description
-**Status:** Idea Phase  
-**Hosts:** Jose / Erastus  
-**Speaker:** Dmitri (Neucom) — needs confirmation; alternatively a PhD student working on FPGAs  
-
-### Objective
-Introduce Hardware Description Language (HDL) using Verilog. Participants implement the chip designed in Event 4 as a synthesizable Verilog module. By the end, they can define a module, wire inputs and outputs, and describe the LIF neuron's behavior in hardware.
-
-### Key takeaways
-*   Verilog syntax basics: modules, ports, registers, always blocks
-*   How to describe sequential and combinational logic for a neuron
-*   A working (if minimal) LIF neuron Verilog module ready for simulation
-
-### Activity block
-
-| Time | Activity | Description | Format / Tool |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Verilog syntax basics: modules, inputs, outputs, registers. Write a minimal LIF neuron module. | Presenter + live coding |
-| **1:00 – 1:15** | **Live Q&A** | Questions on Verilog syntax, HDL concepts | Live |
-| **1:15 – 1:50** | **Coding Activity** | Participants write or modify a Verilog module for a basic LIF neuron using a provided template | GitHub template + Colab / local |
-| **Post-event** | **Async Challenge** | Complete the LIF Verilog module; run basic syntax checks; share in GitHub repo | GitHub + Discord |
-
-### Action items
-*   Events team: confirm Dmitri (Neucom) or source an alternative FPGA / Verilog speaker
-*   Content team: create a Verilog template repository on GitHub (scaffold module, ports pre-defined)
-*   Prepare syntax reference sheet for participants with no HDL background
+#### Module 4 (`W1D4`) — Verilog Hardware Description & Linting
+* **Lead Contributors:** Erastus Toe (`@e_aurelius`), Jose Antonio (`@eljoserass`)
+* **Objective:** Formalize a written hardware specification (`lif_chip_spec.md`) and implement it as a synthesizable, parameterized Verilog module directly inside Google Colab.
+* **Topics Covered:**
+  * Writing a formal port table, register definition, and cycle-by-cycle behavioral specification.
+  * Verilog syntax fundamentals: `module`, `wire`, `reg`, parameters, and sequential `always @(posedge clk)` blocks.
+  * Non-blocking assignments (`<=`) and race-condition prevention.
+  * Cloud-native static linting: executing `verilator --lint-only -Wall` directly inside Colab cells.
+* **Colab Tutorial:** `tutorials/W1D4_VerilogHardwareDesign/W1D4_Tutorial1.ipynb`
 
 ---
 
-## Event 6 — Simulating the Spiking Neuron Chip with Verilator
-**Status:** Idea Phase  
-**Hosts:** Jose / Erastus  
-**Speaker:** TBD — preferably the same speaker as Event 5 for continuity  
-
-### Objective
-Simulate the chip designed in Events 4 and 5 using Verilator. Participants set up a testbench, run a simulation, visualize spike waveforms, and verify that the hardware behavior matches the Python model from Event 2. This is the series capstone.
-
-### Key takeaways
-*   Set up a Verilator testbench from scratch
-*   Visualize waveforms: see the "spike" appear as a real digital signal
-*   Verify hardware-vs-software parity: does the chip do what the Python model predicted?
-
-### Activity block
-
-| Time | Activity | Description | Format / Tool |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Live Talk** | Set up Verilator; write a testbench for the chip designed in Event 4/5; visualize spike waveforms | Presenter + live coding |
-| **1:00 – 1:15** | **Live Q&A** | Questions on Verilator setup, waveform debugging | Live |
-| **1:15 – 1:50** | **Simulation Workshop** | Participants run the testbench against their Verilog module and share waveform screenshots | GitHub repo + Verilator + Discord |
-| **Post-event** | **Async Challenge** | Verify that simulated hardware behavior matches the Python model from Event 2. Final capstone submission. | GitHub + Discord |
-
-### Action items
-*   Content team: create a unified GitHub repository housing the full series codebase (Python LIF model + Verilog modules + Verilator testbenches)
-*   Write setup guide for Verilator installation (Linux, Mac, and Windows via WSL)
-*   Design capstone challenge: participants submit a passing testbench and waveform screenshot
-*   Plan post-series retrospective and community showcase of participant work
+#### Module 5 (`W1D5`) — Verilator Simulation & Waveform Co-Design
+* **Lead Contributors:** Jose Antonio (`@eljoserass`), Erastus Toe (`@e_aurelius`)
+* **Objective:** Compile the Verilog module into a cycle-accurate C++/Python simulation harness, capture execution waveforms, and verify hardware-software parity against the Module 2 reference model.
+* **Topics Covered:**
+  * Setting up automated compilation pipelines with Verilator inside Colab.
+  * Writing testbench stimuli (clock generation, synchronous reset assertion, constant current injection).
+  * In-browser waveform rendering: parsing simulation output (`.vcd`/`.csv`) and plotting digital waveforms using Matplotlib.
+  * Co-design verification: measuring the hardware Inter-Spike Interval (ISI) and calculating percentage discrepancy against the Python reference model.
+* **Colab Tutorial:** `tutorials/W1D5_HardwareVerification/W1D5_Tutorial1.ipynb`
 
 ---
 
-## GitHub Repository Plan
-A single public repository will house all code produced across the six events. This ensures participants always have a canonical reference and can see how the codebase evolves from a Python simulation to a verified hardware design.
+## 4. Repository Structure & Toolchain
 
-### Proposed structure
+All curriculum materials reside in the `open-neuromorphic/course-content` repository:
 
-| Folder | Contents |
-| :--- | :--- |
-| `/python-model` | LIF neuron class from Event 2. snnTorch notebook. Brian 2 demo. |
-| `/verilog` | LIF neuron Verilog module from Events 4–5. Port/interface definitions. Participant template. |
-| `/testbench` | Verilator testbench from Event 6. Waveform output examples. Verification scripts. |
-| `/challenges` | Problem sets for each event's async Discord challenge. Solution stubs. |
-| `/docs` | Pre-read lists, reference sheets, slide links, speaker bios. |
-
-### Action items
-*   Content team: create the repository under the Open Neuromorphic GitHub org
-*   Set up branch protection and contribution guidelines
-*   Add README that explains the series and links to each event recording
-
----
-
-## Open Items & Next Steps
-
-### Speakers still needed
-*   **Event 1:** neuroscientist speaker (contact Rayane at rayanerocha090@gmail.com)
-*   **Event 4:** chip design / digital systems background
-*   **Event 6:** same speaker as Event 5 preferred for continuity
-
-### Outreach to confirm
-*   **Event 2:** reach out to Jason Eshraghian (@jasnn) to confirm for this specific coding session
-*   **Event 3:** confirm Fabrizio Otto availability and scope
-*   **Event 5:** confirm Dmitri (Neucom); explore PhD student alternatives
-
-### Content team
-*   Create GitHub repository structure (see above)
-*   Build or source: patch-clamp simulator, LIF visualizer, logic gate simulator
-*   Write challenge problem sets for all 6 events
-*   Prepare Jupyter notebooks for Events 2 and 3
-*   Compile pre-read list from ONM educational resources (for Event 3)
-
-### Events team
-*   Set dates for all events (target: Summer 2026; flexible to speaker schedules)
-*   Confirm streaming platform and Discord challenge infrastructure
-*   Design participant registration and OER release workflow
+```text
+open-neuromorphic/course-content/
+├── book/                           # JupyterBook configuration and site build
+│   ├── _config.yml
+│   └── _toc.yml
+├── tutorials/
+│   ├── materials.yml               # NMA Course Master Manifest
+│   ├── templates/                  # Standardized notebook authoring templates
+│   │   └── tutorial_template.ipynb
+│   ├── sandboxes/                  # Experimental prototype notebooks
+│   │   └── sandbox_z2s_demo.ipynb
+│   ├── W1D1_NeuronFoundations/     # Module 1
+│   │   ├── README.md
+│   │   ├── W1D1_Intro.ipynb
+│   │   └── W1D1_Tutorial1.ipynb
+│   ├── W1D2_PythonLIFPrototyping/  # Module 2
+│   │   ├── README.md
+│   │   ├── W1D2_Intro.ipynb
+│   │   └── W1D2_Tutorial1.ipynb
+│   ├── W1D3_DigitalLogicMapping/   # Module 3
+│   │   ├── README.md
+│   │   ├── W1D3_Intro.ipynb
+│   │   └── W1D3_Tutorial1.ipynb
+│   ├── W1D4_VerilogHardwareDesign/ # Module 4
+│   │   ├── README.md
+│   │   ├── W1D4_Intro.ipynb
+│   │   └── W1D4_Tutorial1.ipynb
+│   └── W1D5_HardwareVerification/  # Module 5
+│       ├── README.md
+│       ├── W1D5_Intro.ipynb
+│       └── W1D5_Tutorial1.ipynb
+```
 
 ---
 
-## Weekly Take-Home Tasks
-Every event is followed by a take-home task. Each task produces one concrete artifact. That artifact is the raw material for the next session. By event 6, the six artifacts chain together into a complete pipeline: from a hand-drawn neuron sketch to a verified hardware simulation.
+## 5. Cloud-Native Toolchain Integration
 
-| # | Task | What participants build | Artifact | Format |
-| :--- | :--- | :--- | :--- | :--- |
-| **1** | **Sketch the neuron** | Draw + annotate a neuron diagram and voltage trace. Answer 3 written questions on leak, neuromorphic bridges, and spike rate. | Annotated diagram + voltage trace image | Pen/paper or any drawing tool |
-| **2** | **Code the neuron** | Write `LIFNeuron` Python class from scratch using only NumPy. Run simulations at 3 input currents. Compare output to Task 1 sketch. | `lif_neuron.py` + spike plot | Python 3 + NumPy + Matplotlib |
-| **3** | **Map the logic** | Complete an operation-mapping table (Python → digital gates). Draw a block diagram of the digital LIF circuit. Analyse required bit widths. | Mapping table + block diagram | Pen/paper; Python optional |
-| **4** | **Write the spec** | Formalise the block diagram into a hardware spec: port table, internal registers, clock-cycle behaviour pseudocode, self-review. | `lif_chip_spec.md` in GitHub | Markdown / any text editor |
-| **5** | **Implement in Verilog** | Fill in the provided Verilog template implementing the spec. Pass `verilator --lint-only` lint check before submitting. | `lif_neuron.v` (lint-clean) | Verilog + Verilator |
-| **6** | **Simulate & verify** | Run testbench against `lif_neuron.v`. Capture waveform. Compare hardware inter-spike interval to Python model. Written reflection. | Passing testbench + waveform | Verilator + GTKWave |
+To ensure zero installation friction across operating systems (Windows, macOS, Linux), the entire toolchain runs inside the Colab environment:
 
-### Scoring and participation
-Tasks are scored out of 100 points each. For async Discord review the team uses a simplified pass / needs-revision approach. The rubrics and model answers for each task are in the Facilitator Guide document. Full participant problem sets are in the Participant Problem Sets document.
+```python
+# 1. Automated Toolchain Installation (Header Cell)
+!apt-get update -yq > /dev/null
+!apt-get install -y verilator verilog > /dev/null
 
-### The artifact chain
-The design principle: every artifact produced in one task is the raw material for the next. A participant who reaches Task 6 will compare their hardware waveform directly against the Python simulation they wrote in Task 2, using parameters derived from the voltage trace they sketched in Task 1. The chain is intentional — errors compound forward and become teaching moments.
+# 2. Inline Hardware Description
+%%file lif_neuron.v
+module lif_neuron #(parameter WIDTH = 16) (...);
+  // Synthesizable RTL
+endmodule
 
-*   Task 1 sketch → Task 2 Python spec
-*   Task 2 Python class → Task 3 translation source
-*   Task 3 block diagram → Task 4 chip spec first draft
-*   Task 4 spec → Task 5 Verilog target
-*   Task 5 Verilog → Task 6 design under test
-*   Task 6 verified waveform → portfolio capstone
+# 3. In-Notebook Compilation & Execution
+!verilator --lint-only -Wall lif_neuron.v
+!verilator -Wall --cc --exe --build tb_lif_neuron.cpp lif_neuron.v
+!./obj_dir/Vlif_neuron
 
-### Companion documents
-*   **Zero to Silicon — Participant Problem Sets:** full task instructions, questions, and code templates for participants
-*   **Zero to Silicon — Facilitator Guide:** scoring rubrics, model answers, and common mistakes for each task (team use only)
-
-*Open Neuromorphic | Zero to Silicon | Summer 2026 Draft | All content released as OER*
+# 4. Inline Waveform Visualization
+import matplotlib.pyplot as plt
+import pandas as pd
+# Render digital signal traces directly in notebook outputs
+```

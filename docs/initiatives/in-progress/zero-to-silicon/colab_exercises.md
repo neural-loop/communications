@@ -1,462 +1,312 @@
 # Zero to Silicon
-## Weekly Take-Home Problem Sets
+## Interactive Problem Sets & Notebook Specifications
 **Participant Edition | Open Neuromorphic | Summer 2026**
 
-*Build one artifact per week. By the end, they chain into a complete working system.*
+*Build one verified artifact per module. By Module 5, your artifacts chain into a complete working hardware simulation.*
 
-### How the series works
+---
 
-Each event is followed by a take-home task. Every task produces one artifact — something you build, write, or code. The artifact you produce this week is the raw material for next week's session. By event 6, your six artifacts chain together into a complete pipeline: from a hand-drawn neuron sketch all the way to a verified hardware simulation.
+## The Co-Design Artifact Pipeline
 
-| Event | Task name | Artifact you produce | Feeds into |
+Each module produces a tangible artifact. The artifact produced in one module forms the exact specification and input for the next:
+
+| Module | Task / Focus | Artifact You Produce | Feeds Directly Into |
 | :--- | :--- | :--- | :--- |
-| **1** | **Sketch the neuron** | Annotated diagram + voltage trace | *Event 2 — your Python spec* |
-| **2** | **Code the neuron** | `lif_neuron.py` + spike plot | *Event 3 — your gate mapping source* |
-| **3** | **Map the logic** | Mapping table + block diagram | *Event 4 — your chip blueprint* |
-| **4** | **Write the spec** | `lif_chip_spec.md` | *Event 5 — your Verilog target* |
-| **5** | **Implement in Verilog** | `lif_neuron.v` (lint-clean) | *Event 6 — design under test* |
-| **6** | **Simulate & verify** | Passing testbench + waveform | *Your portfolio capstone* |
+| **W1D1** | **Biological Foundations** | Annotated neuron sketch + qualitative voltage plot | *W1D2 Python mathematical specification* |
+| **W1D2** | **Python LIF Reference** | `lif_neuron.py` class + $f\text{-}I$ curve plot | *W1D3 Digital logic translation source* |
+| **W1D3** | **Digital Logic Mapping** | Gate mapping table + bit-width budget | *W1D4 Verilog hardware design target* |
+| **W1D4** | **Verilog Hardware RTL** | Synthesizable, lint-clean `lif_neuron.v` | *W1D5 Simulation design-under-test* |
+| **W1D5** | **Simulation & Co-Design** | Passing testbench + waveform + parity analysis | *Complete portfolio capstone* |
 
 ---
 
-## Task 1 — Sketch the neuron
-*Event 1: Neuroscience Foundations | No tools required*
+## Task 1 (`W1D1`) — Biological Foundations & Voltage Dynamics
+*Module: Biological & Conceptual Foundations | Interactive Colab / Drawing Tool*
 
-**Time estimate:** 60–90 minutes  
-**Tools needed:** Pencil and paper, or any drawing tool (Excalidraw, iPad, Figma — anything works)  
-**Submit to:** Discord `#z2s-task-1` as an image or PDF
+**Estimated Time:** 60–90 minutes  
+**Environment:** Google Colab / Excalidraw / Drawing Tool  
+**Submit to:** Discord `#zero-to-silicon` (Task 1 Thread)
 
 ### Background
-In the session you learned that a neuron is a dynamical system — it integrates input, builds up membrane potential, and fires a discrete spike when a threshold is crossed. Before you write any code, you are going to draw that system. Drawing forces you to encode the concepts. If you can label the diagram correctly, you understand the vocabulary that every later session builds on.
+A biological neuron is a continuous-time dynamical system that integrates synaptic currents across its membrane capacitance, leaks charge through resting ion channels, and emits a discrete, all-or-none action potential when membrane potential reaches threshold. In this task, you specify the biological behaviors that our digital chip must reproduce.
 
-### Part A — The neuron anatomy (20 pts)
-Draw a single neuron. Your drawing does not need to be anatomically perfect — a clear schematic is better than a detailed illustration. Label all of the following:
-*   Dendrites — where input arrives
-*   Soma (cell body) — where integration happens
-*   Axon — where the spike travels
-*   Axon terminal / synapse — where the signal passes to the next neuron
-*   Membrane — the boundary that maintains the electrical potential
-*   Indicate (with an arrow or annotation) where threshold crossing occurs
+### Part A — Anatomical & Functional Schematic (20 pts)
+Create a clean functional schematic of a biological neuron. Label all six core components:
+1. **Dendrites:** Synaptic input collection.
+2. **Soma:** Continuous somatic charge integration.
+3. **Axon Hillock / Trigger Zone:** Action potential initiation site (threshold crossing).
+4. **Axon:** Active propagation pathway.
+5. **Synaptic Terminal:** Output interface to downstream neurons.
+6. **Lipid Bilayer Membrane:** Capacitive boundary maintaining electrical potential difference.
 
-### Part B — The voltage trace (30 pts)
-Draw a graph with time on the x-axis and membrane potential V on the y-axis. Your trace must show a complete LIF cycle. Label all of the following on the graph:
-*   Resting potential — the baseline V before any input
-*   Integration phase — V rising as input current arrives
-*   Threshold `V_th` — mark it as a dashed horizontal line
-*   Spike — the moment V crosses threshold (draw a sharp upward deflection)
-*   Reset — V dropping back to resting potential after the spike
-*   Show at least two full spike cycles
+### Part B — Qualitative Voltage Trace (30 pts)
+Plot membrane potential ($V$) over time showing at least two full spike cycles. Clearly mark:
+* Resting potential ($V_{reset}$).
+* Exponential integration trajectory as constant current arrives.
+* Firing threshold ($V_{th}$) as a dashed horizontal boundary.
+* Instantaneous action potential spike.
+* Post-spike refractory reset to baseline.
 
-### Part C — Written questions (50 pts)
+### Part C — Conceptual Reasoning (50 pts)
 
-**Question 1 (15 pts)**  
-In your own words: what does the "leak" in Leaky Integrate-and-Fire mean? What would happen to a neuron's firing behaviour if there were no leak at all? Answer in 3–4 sentences.
-
-**Question 2 (15 pts)**  
-The talk introduced the concept of the "neuromorphic bridge" — how a biological property maps to a hardware constraint. Choose one of the following biological properties and describe, in 2–3 sentences, how you expect it to appear in the digital chip we will build later in the series:
-*   Sparsity of spiking
-*   Event-driven signalling
-*   Coincidence detection at the synapse
-
-**Question 3 (20 pts)**  
-Look at your voltage trace from Part B. If you doubled the input current, describe what you would expect to happen to: (a) the time between spikes, (b) the height of the spike, and (c) the shape of the integration ramp. Answer in 4–5 sentences. You do not need to calculate exact numbers — we are looking for correct qualitative reasoning.
-
-> **What this feeds into**  
-> Your Part B voltage trace is your specification for the Python class in Task 2. When you write `lif_neuron.py`, its output should produce a plot that looks like the trace you drew here. If they don't match, something in your code is wrong — and this drawing tells you what the correct behaviour looks like.
+* **Question 1 (15 pts):** In 3–4 sentences, explain the physical meaning of the membrane "leak." What would happen to the firing frequency and memory of a neuron if the leak conductance were zero?
+* **Question 2 (15 pts):** Choose one of the following biological features and describe in 2–3 sentences how it maps to an architectural advantage in digital silicon:
+  * *Sparsity of spiking*
+  * *Event-driven (clock-gated) signaling*
+  * *Synaptic coincidence detection*
+* **Question 3 (20 pts):** If input current ($I_{in}$) is doubled, describe the expected qualitative changes in: (a) Inter-spike interval, (b) Spike amplitude, and (c) Slope of the subthreshold integration curve.
 
 ---
 
-## Task 2 — Code the neuron
-*Event 2: Prototyping an LIF Neuron in Python | Python + NumPy only*
+## Task 2 (`W1D2`) — Prototyping an LIF Neuron in Python
+*Module: Python LIF Reference Modeling | Pure Python + NumPy*
 
-**Time estimate:** 2–3 hours  
-**Tools needed:** Python 3, NumPy, Matplotlib. No snnTorch for the class itself.  
-**Submit to:** GitHub repo `/python-model/lif_neuron.py` + one plot image in Discord `#z2s-task-2`
+**Estimated Time:** 2 hours  
+**Environment:** Google Colab (`W1D2_Tutorial1.ipynb`)  
+**Submit to:** GitHub PR / Discord `#zero-to-silicon`
 
 ### Background
-The session covered the LIF equations and showed them implemented in snnTorch. Your task is to implement the neuron from scratch without that library. Writing the equations yourself — before using a framework — is the difference between understanding what snnTorch does and just calling functions. Your implementation will be the reference model that your hardware chip must later replicate.
+Before writing hardware description code, you must build a software reference model. Implementing discrete-time Euler integration from first principles ensures you understand the exact mathematical operations your silicon must execute.
 
-### Part A — The LIF class (50 pts)
-Write a Python class called `LIFNeuron`. It must implement the following interface exactly, as later tasks depend on it:
+### Part A — The `LIFNeuron` Reference Class (50 pts)
+Implement a clean `LIFNeuron` class implementing this exact interface:
 
 ```python
+import numpy as np
+
 class LIFNeuron:
-    def __init__(self, tau, V_th, V_reset, dt=1.0):
-        # tau : membrane time constant (ms)
-        # V_th : spike threshold (mV)
-        # V_reset : reset potential after spike (mV)
-        # dt : timestep (ms)
-        pass
+    def __init__(self, tau=20.0, V_th=-55.0, V_reset=-70.0, dt=0.5):
+        """
+        tau     : Membrane time constant (ms)
+        V_th    : Firing threshold (mV)
+        V_reset : Reset / resting potential (mV)
+        dt      : Integration timestep (ms)
+        """
+        self.tau = tau
+        self.V_th = V_th
+        self.V_reset = V_reset
+        self.dt = dt
+        self.V = V_reset
 
     def step(self, I_in):
-        # I_in : input current for this timestep
-        # Returns: (V, spike) where spike is 1 if fired, 0 otherwise
-        pass
+        """
+        Executes one timestep of Euler integration:
+        dV = (dt / tau) * (-(V - V_reset) + I_in)
+        Returns: (V_current, spike_flag)
+        """
+        dV = (self.dt / self.tau) * (-(self.V - self.V_reset) + I_in)
+        self.V += dV
+
+        if self.V >= self.V_th:
+            spike = 1
+            self.V = self.V_reset
+        else:
+            spike = 0
+
+        return self.V, spike
 
     def reset_state(self):
-        # Reset membrane potential to V_reset
-        pass
-
-The update rule your step() method must implement is the discrete-time LIF
-equation:
-
-dV = (dt / tau) * (-(V - V_reset) + I_in)
-V = V + dV
-
-if V >= V_th:
-    spike = 1
-    V = V_reset
-else:
-    spike = 0
+        self.V = self.V_reset
 ```
 
-Part B — Simulation and plot (30 pts)
+### Part B — Simulation & Firing Response (30 pts)
+Instantiate your neuron with parameters $\tau = 20\,\text{ms}$, $V_{th} = -55\,\text{mV}$, $V_{reset} = -70\,\text{mV}$, $\Delta t = 0.5\,\text{ms}$.
+1. Run a 500-step simulation with constant current $I_{in} = 2.0\,\text{nA}$ and plot $V(t)$ with the threshold marked.
+2. Run multi-current simulations ($I_{in} \in \{1.0, 2.0, 4.0\}\,\text{nA}$) on shared axes with a legend.
 
-Instantiate your neuron with these parameters: tau=20, V_th=-55, V_reset=-70,
-dt=0.5. Run two simulations:
+### Part C — Analytical Questions (20 pts)
+* **Question 1 (10 pts):** Does the spike rate scale linearly with input current? Explain why the leak term causes the $f\text{-}I$ curve to compress at high frequencies.
+* **Question 2 (10 pts):** If the leak term is dropped ($\Delta V = \frac{\Delta t}{\tau} I_{in}$), how does the neuron behave mathematically?
 
-1.  Constant input current I=2.0 for 500 timesteps. Plot V over time. Annotate
-    the threshold line.
-2.  Run the same simulation with I=1.0, I=2.0, and I=4.0. Plot all three V
-    traces on the same axes. Add a legend.
+---
 
-Your plot should visually match the voltage trace you drew in Task 1. If it does
-not, revisit your drawing or your code — one of them is wrong.
+## Task 3 (`W1D3`) — Digital Logic Mapping & Bit-Width Analysis
+*Module: Digital Logic Mapping & Bit-Width Analysis | Markdown / Colab*
 
-Part C — Written questions (20 pts)
+**Estimated Time:** 90 minutes  
+**Environment:** Google Colab (`W1D3_Tutorial1.ipynb`)  
+**Submit to:** `lif_logic_map.md` in repository / Discord
 
-Question 1 (10 pts)
-Look at your three-current plot from Part B. Does spike rate increase linearly
-with input current? Describe what you observe and give a brief explanation for
-why (or why not). 3–4 sentences.
+### Background
+Hardware executes arithmetic through physical gates and registers. In this task, you map every mathematical operation in `LIFNeuron.step()` to a hardware logic primitive and determine the integer and fractional bit widths required to avoid hardware overflow.
 
-Question 2 (10 pts)
-The leak term in your update rule is -(V - V_reset). What would happen if you
-removed this term entirely (i.e. dV = dt/tau * I_in)? Describe the qualitative
-change in behaviour and whether the neuron would still be a plausible biological
-model. 3–4 sentences.
+### Part A — Arithmetic Logic Mapping (40 pts)
+Complete the digital translation table for every line of `LIFNeuron.step()`:
 
-What this feeds into
-Your LIFNeuron class with tau=20, V_th=-55, V_reset=-70, dt=0.5 is your
-reference implementation. In Task 3 you will translate each line of step() into
-a digital logic operation. In Task 6 you will run your chip at the same
-parameters and check that the spike timing matches.
+| Python Operation | Hardware Digital Component | Implementation Notes |
+| :--- | :--- | :--- |
+| `V - V_reset` | Subtractor | Eliminated if $V_{reset}$ is offset to digital `0` |
+| `(dt / tau) * (...)` | Arithmetic Right-Shift | Multipliers are costly; approximate $\frac{\Delta t}{\tau} = \frac{0.5}{20} = \frac{1}{40} \approx \frac{1}{32}$ via `>> 5` |
+| `V + dV` | Adder / Accumulator | Intermediate summation register |
+| `V >= V_th` | Digital Comparator | Drives multiplexer select line |
+| `V = V_reset` | Multiplexer (MUX) | Selects between updated potential and reset value |
+| `spike` | Output Register / Wire | Single-bit digital flag, high for 1 clock cycle |
+| State retention | D Flip-Flop Register (`V_mem`) | Holds membrane state across clock cycles |
 
-Task 3 — Map the logic
+### Part B — Block Diagram (30 pts)
+Sketch the digital register-transfer level (RTL) block diagram showing:
+* `clk` and synchronous `rst` lines routed to `V_mem`.
+* Input current bus `I_in` feeding the arithmetic adder block.
+* Comparator checking `V_mem >= V_th` to assert `spike`.
+* Multiplexer routing either `V_reset` or `V_mem + dV` back to the register input.
 
-Event 3: Fundamentals of Digital Logic | Pen and paper + Python optional
+### Part C — Quantization & Bit-Shift Analysis (30 pts)
+* **Question 1 (15 pts):** Map the biological range ($V_{reset} = -70\,\text{mV}$ to $V_{th} = -55\,\text{mV}$) into unsigned fixed-point where $-70\,\text{mV} = 0$. For a dynamic range of $40\,\text{mV}$ with $0.1\,\text{mV}$ resolution, calculate the minimum required bit-width ($N = \lceil\log_2(\text{range}/\text{resolution})\rceil$).
+* **Question 2 (15 pts):** Calculate the exact percentage error introduced by approximating $\frac{\Delta t}{\tau} = 0.025$ as $\frac{1}{32} = 0.03125$ (right-shift by 5). Will the simulated hardware neuron fire faster or slower than the Python reference model?
 
-Time estimate: 90 minutes–2 hours
-Tools needed: Pencil and paper for diagrams. Python optional to verify your
-bit-width answer.
-Submit to: Discord #z2s-task-3 as image/PDF + commit lif_logic_map.md to GitHub
-/docs
+---
 
-Background
+## Task 4 (`W1D4`) — Verilog Hardware Description
+*Module: Verilog Hardware Description & Linting | In-Notebook Verilator*
 
-The session showed that digital logic represents every arithmetic operation as
-gates and signals. Your task is to look at the LIF update rule from your Python
-implementation and translate each operation into the digital logic equivalent.
-This is the step most software engineers find hardest — not because it is
-complex, but because it requires thinking in a different way. By the end you
-will have a block diagram that is the first draft of your chip.
+**Estimated Time:** 2–3 hours  
+**Environment:** Google Colab (`W1D4_Tutorial1.ipynb`)  
+**Submit to:** Inline cell `lif_neuron.v`
 
-Part A — Operation mapping table (40 pts)
+### Background
+Using your Task 3 logic map, implement a synthesizable Verilog module. The module runs fixed-point arithmetic using non-blocking sequential logic and passes static lint checks directly in Colab.
 
-Fill in the table below for each operation in your LIFNeuron.step() method. For
-each Python operation, identify the digital logic component that implements it
-in hardware.
+### Part A — Verilog Implementation (`lif_neuron.v`) (60 pts)
+Write your hardware description module using the template below:
 
-| Python operation         | Digital logic component                    | Notes / constraints                                                        |
-| :----------------------- | :----------------------------------------- | :------------------------------------------------------------------------- |
-| `V - V_reset`            | Subtractor                                 | Signed arithmetic — result can be negative                                 |
-| `dt / tau * (...)`       | Multiplier or shift                        | Multiplication is expensive; can `dt/tau` be approximated as a power of 2? |
-| `V + dV`                 | Adder / accumulator                        | Needs to store result — what register holds V?                             |
-| `V >= V_th`              | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_* | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_*                                 |
-| `V = V_reset` (on spike) | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_* | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_*                                 |
-| `return spike`           | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_* | Single-bit output signal                                                   |
-| Store `V` between steps  | *\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_* | What type of storage element holds state across clock cycles?              |
-
-Part B — Block diagram (30 pts)
-
-Using your completed mapping table, draw a block diagram of the digital LIF
-neuron. Your diagram must show:
-
-  - Each logic component as a labelled box (subtractor, adder, comparator,
-    multiplexer, register)
-  - Data signals as arrows connecting components, labelled with the signal name
-    (V, dV, I_in, spike)
-  - The clock input feeding into the register(s)
-  - A reset input that forces V back to V_reset
-
-Hint: the comparator output should connect to a multiplexer that selects between
-"V + dV" and "V_reset" as the next value of V.
-
-Part C — Bit width analysis (30 pts)
-
-Question 1 (15 pts)
-Your membrane potential V ranges from V_reset = -70 mV to approximately V_th
-+ 15 = -40 mV (allowing for overshoot). The precision you need is about 0.5 mV
-per step (matching your dt=0.5 from Task 2). How many bits do you need to
-represent V? Show your working. Use the formula: bits = ceil(log2(range /
-resolution)).
-
-Question 2 (15 pts)
-The multiplier for dt/tau = 0.5/20 = 0.025 is expensive to implement exactly in
-hardware. Suggest a way to approximate this multiplication using only bit-shift
-operations (i.e. dividing by powers of 2). What is the closest approximation you
-can achieve, and what error does it introduce? Would the neuron still fire at
-approximately the correct rate with this approximation?
-
-What this feeds into
-Your block diagram is the first draft of your chip design. In Task 4 you will
-formalise it into a written hardware spec — defining the exact module interface,
-signal names, and bit widths. The bit-width answer from Part C becomes the
-signal widths in your Verilog module.
-
-Task 4 — Write the spec
-
-Event 4: Design the Digital Spiking Chip | Markdown
-
-Time estimate: 1–2 hours
-Tools needed: Any text editor. Output is a Markdown file.
-Submit to: GitHub repo /docs/lif_chip_spec.md (commit directly to the repo)
-
-Background
-
-A hardware spec is the contract between the designer and the implementer. In
-this case, you are both — but writing the spec before writing Verilog forces you
-to think clearly about what the module needs to do before you worry about
-syntax. A well-written spec makes Task 5 straightforward. A vague spec makes
-Task 5 painful.
-
-Part A — Write lif_chip_spec.md (70 pts)
-
-Your spec must contain all of the following sections. A template is provided in
-the GitHub repo at /docs/lif_chip_spec_template.md.
-
-Section 1: Module overview (10 pts)
-One paragraph. What does this module do? What problem does it solve? Who would
-use it?
-
-Section 2: Port table (20 pts)
-A table with columns: Port name | Direction | Width (bits) | Description. Must
-include all inputs and outputs. Required ports:
-
-  - clk — clock input
-  - rst — synchronous reset
-  - I_in — input current (use the bit width from your Task 3 Part C analysis)
-  - V_out — membrane potential output (for observation / debugging)
-  - spike — single-bit spike output
-
-Section 3: Internal registers (15 pts)
-List every register your module needs. For each: name, width in bits, initial
-value, and what it represents.
-
-Section 4: Behaviour per clock cycle (25 pts)
-This is the most important section. Write pseudocode (not Verilog) for what
-happens on every rising clock edge. It must cover:
-
-  - What happens when rst is high
-  - The LIF update calculation
-  - The threshold comparison
-  - The reset-or-update decision (the multiplexer from your block diagram)
-  - When spike is asserted high and for how long
-
-Part B — Self-review checklist (30 pts)
-
-Before submitting, answer each question in your spec document under a
-"Self-review" heading:
-
-1.  Does every signal have a defined bit width? (yes/no + fix any that don't)
-2.  Is the reset behaviour fully specified? What is V on the first cycle after
-    rst goes low?
-3.  What happens if I_in and rst are both asserted in the same cycle?
-4.  Could another person implement your module in Verilog from this spec alone,
-    without asking you questions? If not, what is ambiguous?
-
-What this feeds into
-Your lif_chip_spec.md is the direct input for Task 5. The port table becomes
-your Verilog module declaration. The behaviour section becomes the always
-@(posedge clk) block. If your spec is precise, your Verilog will be easy to
-write and mostly correct on the first try.
-
-Task 5 — Implement in Verilog
-
-Event 5: Intro to Verilog & Hardware Description | Verilog + Verilator lint
-
-Time estimate: 2–4 hours
-Tools needed: Verilator (for lint check). Install guide in
-/docs/setup_verilator.md in the repo.
-Submit to: GitHub repo /verilog/lif_neuron.v — must pass lint before submitting
-
-Background
-
-The session covered Verilog syntax: modules, ports, reg and wire, always blocks,
-and sequential logic. Your task is to implement your lif_chip_spec.md as a
-synthesizable Verilog module. A starter template with the port declarations
-already written is in /verilog/lif_neuron_template.v — you fill in the logic.
-
-Part A — Implement lif_neuron.v (60 pts)
-
-Open /verilog/lif_neuron_template.v. The module declaration and port list are
-already provided based on the standard spec. Your task is to fill in:
-
-1.  Internal register declarations — declare V_mem and any intermediate
-    registers you need
-2.  The always @(posedge clk) block — implement your spec's behaviour section
-3.  The spike output assignment
-
-The template looks like this:
+```verilog
+%%file lif_neuron.v
+`timescale 1ns / 1ps
 
 module lif_neuron #(
-    parameter WIDTH = 16,
-    parameter V_TH = 16'd3800, // -55 mV in fixed-point
-    parameter V_RESET = 16'd0, // -70 mV → offset to 0
-    parameter TAU_INV = 16'd3  // approx 1/tau as shift
+    parameter WIDTH   = 16,
+    parameter V_TH    = 16'd3800, // Fixed-point mapped threshold
+    parameter V_RESET = 16'd0,    // Offset baseline
+    parameter TAU_INV = 5         // Right-shift by 5 (~ 1/32 decay)
 ) (
-    input wire clk,
-    input wire rst,
-    input wire [15:0] I_in,
-    output reg [15:0] V_out,
-    output reg spike
+    input  wire              clk,
+    input  wire              rst,
+    input  wire [WIDTH-1:0]  I_in,
+    output reg  [WIDTH-1:0]  V_out,
+    output reg               spike
 );
 
-// YOUR CODE HERE
+    reg [WIDTH-1:0] V_mem;
+
+    always @(posedge clk) begin
+        if (rst) begin
+            V_mem <= V_RESET;
+            V_out <= V_RESET;
+            spike <= 1'b0;
+        end else begin
+            if (V_mem >= V_TH) begin
+                spike <= 1'b1;
+                V_mem <= V_RESET;
+                V_out <= V_RESET;
+            end else begin
+                spike <= 1'b0;
+                // Leaky integration with arithmetic right-shift
+                V_mem <= V_mem + I_in - ((V_mem - V_RESET) >> TAU_INV);
+                V_out <= V_mem;
+            end
+        end
+    end
 
 endmodule
+```
 
-Note: the template uses fixed-point arithmetic with an offset to avoid negative
-numbers. -70 mV is mapped to 0, and -55 mV is mapped to 3800 (in units of 0.01
-mV per LSB with 8-bit fractional part). You may adjust the parameterisation if
-your spec uses a different encoding — document your choice.
+### Part B — In-Notebook Lint Check (20 pts)
+Execute the Verilator linter cell in Colab and fix all warnings:
 
-Part B — Lint check (20 pts)
+```python
+!verilator --lint-only -Wall lif_neuron.v
+```
 
-Run the following command from the repo root and fix all warnings before
-submitting:
+*Criteria for Full Marks:* Zero warnings generated under `-Wall`.
 
-verilator --lint-only -Wall verilog/lif_neuron.v
+### Part C — HDL Conceptual Checks (20 pts)
+* **Question 1 (10 pts):** Why must `V_mem` be declared as a `reg` rather than a `wire` in sequential logic?
+* **Question 2 (10 pts):** Explain why non-blocking assignments (`<=`) are mandatory inside clocked `always @(posedge clk)` blocks to avoid simulation race conditions.
 
-Common lint warnings you will likely see and must fix:
+---
 
-  - Width mismatch — assigning a wider signal to a narrower register
-  - Undriven / unused signals — declared but never assigned or read
-  - Blocking vs non-blocking — use <= (non-blocking) inside always @(posedge
-    clk)
+## Task 5 (`W1D5`) — Simulation, Waveforms & Co-Design Verification
+*Module: Verilator Simulation & Waveform Co-Design | Colab + Matplotlib*
 
-Part C — Written questions (20 pts)
+**Estimated Time:** 2–3 hours  
+**Environment:** Google Colab (`W1D5_Tutorial1.ipynb`)  
+**Submit to:** Waveform plot + Co-Design Reflection in Discord `#zero-to-silicon`
 
-Question 1 (10 pts)
-In your implementation, what is the difference between a reg and a wire? Which
-did you use for V_mem and why? Could you have used the other one? 3–4 sentences.
+### Background
+In this capstone task, you compile your Verilog module into a cycle-accurate executable, apply testbench stimuli, visualize digital signal waveforms in Matplotlib, and measure the hardware-software parity against your Task 2 Python model.
 
-Question 2 (10 pts)
-Verilog has two types of assignment inside always blocks: = (blocking) and <=
-(non-blocking). You were told to use <=. Explain in your own words why using =
-inside an always @(posedge clk) block leads to incorrect simulation
-behaviour. 3–4 sentences.
+### Part A — Testbench Execution in Colab (40 pts)
+Execute the provided C++/Python testbench in your notebook for 2000 cycles with constant input $I_{in} = 200$:
 
-What this feeds into
-Your lif_neuron.v is the design under test in Task 6. The testbench will
-instantiate exactly this module, apply a constant I_in, and check that a spike
-appears within a calculated number of clock cycles. A lint-clean file is a
-necessary but not sufficient condition — Task 6 will tell you if the logic is
-correct.
+```cpp
+%%file tb_lif_neuron.cpp
+#include "Vlif_neuron.h"
+#include "verilated.h"
+#include <iostream>
+#include <fstream>
 
-Task 6 — Simulate and verify — series capstone
+int main(int argc, char** argv) {
+    Verilated::commandArgs(argc, argv);
+    Vlif_neuron* top = new Vlif_neuron;
 
-Event 6: Simulating with Verilator | Verilator + GTKWave
+    std::ofstream out("wave.csv");
+    out << "cycle,clk,rst,I_in,V_out,spike\n";
 
-Time estimate: 2–4 hours
-Tools needed: Verilator, GTKWave (or the web-based VCD viewer linked in the
-repo)
-Submit to: Discord #z2s-task-6 with waveform screenshot + final lif_neuron.v
-committed to GitHub
+    top->clk = 0;
+    top->rst = 1;
+    top->I_in = 200;
 
-Background
+    for (int cycle = 0; cycle < 1000; cycle++) {
+        top->clk = !top->clk;
+        if (cycle > 4) top->rst = 0;
+        top->eval();
+        if (top->clk) {
+            out << cycle/2 << "," << (int)top->clk << "," << (int)top->rst << "," 
+                << top->I_in << "," << top->V_out << "," << (int)top->spike << "\n";
+        }
+    }
+    std::cout << "Simulation complete. Output written to wave.csv\n";
+    delete top;
+    return 0;
+}
+```
 
-The session showed how to wrap a Verilog module in a C++ testbench, compile it
-with Verilator, and visualise the output as a waveform. Your task is to run the
-provided testbench against your lif_neuron.v, observe the spike waveform, and
-answer the series' final question: does your hardware match your Python model?
+Compile and run:
+```python
+!verilator -Wall --cc --exe --build tb_lif_neuron.cpp lif_neuron.v
+!./obj_dir/Vlif_neuron
+```
 
-Part A — Run the testbench (40 pts)
+### Part B — In-Notebook Waveform Visualization (30 pts)
+Parse `wave.csv` and render the digital signal trace directly in Colab:
 
-The testbench is in /testbench/tb_lif_neuron.cpp. It applies a constant I_in=200
-(in the fixed-point encoding) for 2000 clock cycles and checks that:
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
 
-  - At least one spike occurs within 2000 cycles
-  - The spike signal is high for exactly 1 clock cycle
-  - V_out returns to V_RESET within 2 cycles of a spike
+df = pd.read_csv("wave.csv")
 
-To compile and run:
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
+ax1.plot(df["cycle"], df["V_out"], color="navy", label="Hardware V_mem")
+ax1.axhline(y=3800, color="crimson", linestyle="--", label="Threshold V_th")
+ax1.set_ylabel("Membrane Potential")
+ax1.legend(loc="upper right")
 
-cd testbench
-make
-./obj_dir/Vlif_neuron
+ax2.step(df["cycle"], df["spike"], color="red", where="post", label="Spike Output")
+ax2.set_ylabel("Digital Spike")
+ax2.set_xlabel("Clock Cycle")
+ax2.set_ylim(-0.1, 1.1)
+ax2.legend(loc="upper right")
 
-A passing run prints: PASS: spike detected at cycle N. A failing run prints:
-FAIL: followed by the specific check that failed.
+plt.suptitle("Zero to Silicon: Hardware Simulation Waveform", fontweight="bold")
+plt.show()
+```
 
-Screenshot your terminal output (passing or failing — we want to see it either
-way) and post in Discord.
+### Part C — Hardware vs. Software Parity (30 pts)
+1. Measure the **Inter-Spike Interval (ISI)** in clock cycles from your hardware waveform.
+2. Run your Task 2 Python model using equivalent parameter scaling and compute the software ISI in timesteps.
+3. **Written Reflection (150–200 words):**
+    * Compare hardware ISI vs. Python ISI. Calculate the percentage discrepancy ($\frac{|\text{ISI}_{HW} - \text{ISI}_{SW}|}{\text{ISI}_{SW}} \times 100$).
+    * Explain how the right-shift approximation ($1/32$ vs $1/40$) accounts for this discrepancy.
+    * How would you scale this single-neuron module into an array of synaptic cores?
 
-Part B — Waveform analysis (30 pts)
-
-The testbench generates a VCD file at /testbench/lif_neuron.vcd. Open it in
-GTKWave (or the web viewer) and add these signals to the waveform view: clk,
-rst, I_in, V_out, spike.
-
-Take a screenshot of your waveform showing at least two full spike cycles and
-answer:
-
-1.  How many clock cycles between spikes (the inter-spike interval, ISI)?
-2.  What is the value of V_out on the cycle immediately after a spike?
-3.  Does V_out increase monotonically between spikes, or does it have any
-    unexpected shape?
-
-Part C — Hardware vs Python comparison (30 pts) — the series payoff
-
-This is the question the entire series has been building toward.
-
-Step 1
-Run your Task 2 Python simulation with I_in=200 (rescaled to the same units as
-your hardware) for the equivalent number of timesteps. Record the inter-spike
-interval from the Python model.
-
-Step 2
-Compare the ISI from your hardware simulation (Part B) with the ISI from your
-Python model. They should be close but may not be identical due to the
-fixed-point approximation.
-
-Step 3 — Written answer (30 pts)
-Write a 150–200 word reflection covering:
-
-  - Does your hardware spike at approximately the same rate as your Python
-    model? What is the percentage difference in ISI?
-  - If there is a difference, what is the most likely cause? (Think about your
-    bit-shift approximation of dt/tau from Task 3.)
-  - What would you change in your design to reduce this error?
-  - What does it mean that you have a working digital neuron? What could you do
-    with this chip next?
-
-Series complete — what you built
-
-You now have a complete pipeline:
-
-  - Task 1: A biological reference — annotated neuron diagram + voltage trace
-  - Task 2: A Python reference model — lif_neuron.py with verified spike
-    behaviour
-  - Task 3: A logic mapping — every Python operation translated to digital
-    hardware
-  - Task 4: A hardware spec — lif_chip_spec.md, the contract for your
-    implementation
-  - Task 5: A Verilog implementation — lif_neuron.v, synthesizable and
-    lint-clean
-  - Task 6: A verified simulation — waveform evidence that your chip behaves as
-    designed
-
-This is a real portfolio piece. Your GitHub repo tells a coherent story: here is
-a neuron, here is the math, here is the logic, here is the hardware, here is the
-proof it works.

@@ -1,75 +1,52 @@
 # Zero to Silicon
-## Weekly Tasks — Facilitator Guide & Rubrics
-**ONM Team Edition | Not for participant distribution**
-
-*Scoring rubrics, model answers, facilitation notes, and common mistakes for each task.*
-
-## Facilitation principles
-
-The tasks are deliberately graduated. Tasks 1–3 require only understanding and Python — the barrier is low enough that anyone who attended the session can attempt them. Tasks 4–5 require following a structured format, which reduces the cognitive load of the HDL work. Task 6 is the only one that requires a working toolchain.
-
-When reviewing in Discord: focus feedback on the "feeds into" connection. The most useful thing you can say to a participant is "your voltage trace shows X, which means your Python class should behave like Y" — connecting the artifact to the next task is more valuable than correcting minor errors in isolation.
-
-Tasks are scored out of 100 for completeness and correctness. For async Discord review, a simpler pass/needs-revision approach is fine — the rubric is a guide for the team, not a grade for participants.
+## Facilitator Guide, Grading Rubrics & Solution Keys
+**Executive Committee & Facilitator Edition | Open Neuromorphic | Summer 2026**
 
 ---
 
-## Task 1 rubric — Sketch the neuron
+## 1. Facilitation Philosophy & Community Workflow
 
-### Part A — Anatomy (20 pts)
+Zero to Silicon is designed as an encouraging, low-friction entry point into neuromorphic hardware engineering. Facilitation takes place asynchronously in the Discord `#zero-to-silicon` forum threads and during informal co-working sessions in `🔊 Z2S Working Lounge`.
 
-| Criterion | What we look for | Points |
-| :--- | :--- | :--- |
-| **All 6 labels present** | Dendrites, soma, axon, terminal, membrane, threshold location | **12 pts** |
-| **Labels correctly placed** | Threshold on soma/axon hillock, not on dendrite | **5 pts** |
-| **Diagram is readable** | Clear enough for someone else to follow | **3 pts** |
-
-### Part B — Voltage trace (30 pts)
-
-| Criterion | What we look for | Points |
-| :--- | :--- | :--- |
-| **All 5 features labelled** | Resting, integration, `V_th` dashed line, spike, reset | **20 pts** |
-| **Two full cycles shown** | Both spikes visible with reset between them | **5 pts** |
-| **Qualitative shape correct** | Integration ramp, sharp spike, abrupt reset | **5 pts** |
-
-### Part C — Written questions (50 pts)
-
-**Q1 model answer — the leak (15 pts)**  
-Full marks: The leak is the passive decay of membrane potential back toward resting potential when no input is present. Biologically, ion channels in the membrane allow charge to leak out. Without a leak, the neuron would be a perfect integrator — it would accumulate all input forever, never forgetting old stimuli, and fire at rates determined entirely by total past input rather than recent activity. This makes it a poor model of real neurons, which are sensitive to recent input.
-
-**Q2 model answers by property (15 pts)**  
-*Sparsity:* most digital circuits are active all the time (clock-driven). A neuromorphic chip exploits sparsity by only doing work when a spike occurs — power consumption scales with activity rather than clock rate.  
-*Event-driven signalling:* instead of sampling every cycle, the chip only processes when a spike arrives. This maps to interrupt-driven or asynchronous logic and is the basis of AER (Address Event Representation).  
-*Coincidence detection:* the synapse only fires if two inputs arrive within a short time window. In hardware this is a logical AND with a time window — implemented as a register that holds the first spike and a comparator that checks whether the second arrives before the register clears.
-
-**Q3 model answer — doubling current (20 pts)**  
-Full marks: (a) Time between spikes decreases — the integration ramp is steeper, so threshold is crossed more quickly. (b) Spike height does not change — the LIF model has a fixed threshold and reset; the spike is a discrete event, not a graded signal. (c) The integration ramp becomes steeper — dV/dt is larger because `I_in` is larger, but the leak also increases as V rises, so the ramp curves slightly rather than being perfectly linear.
-
-### Common mistakes to watch for
-*   Drawing the spike as a smooth curve rather than a sharp event — the LIF spike is instantaneous in the discrete model
-*   Placing the threshold label on the axon terminal rather than the axon hillock / soma
-*   Q3: saying spike height increases with current — the threshold-and-reset mechanism means it does not
+### Key Facilitator Guidelines
+1. **Connect Artifacts Across Modules:** Always frame feedback around the pipeline. If a participant has an issue in `W1D4` (Verilog), check their `W1D3` (Logic Map) and `W1D2` (Python) parameters.
+2. **Prioritize Browser-First Troubleshooting:** All exercises run in Google Colab. Avoid asking students to install local EDA packages unless they specifically request advanced local workflows.
+3. **Encourage Iterative Check-ins:** Use a lightweight "Pass / Needs Revision" review standard on Discord rather than intimidating academic letter grades.
 
 ---
 
-## Task 2 rubric — Code the neuron
+## 2. Module Rubrics & Solution Keys
 
-### Part A — LIF class (50 pts)
+---
 
-| Criterion | What we look for | Points |
-| :--- | :--- | :--- |
-| **Correct update equation** | `dV = dt/tau * (-(V-V_reset) + I_in)`, **applied each step** | **20 pts** |
-| **Threshold + reset logic** | `spike=1` and `V=V_reset` when `V >= V_th`, else `spike=0` | **15 pts** |
-| **Interface matches spec** | `step()` returns `(V, spike)`; `reset_state()` works | **10 pts** |
-| **State maintained between calls** | `V` persists across `step()` calls (instance variable) | **5 pts** |
+### Module 1 (`W1D1`) — Biological & Conceptual Foundations
 
-**Model implementation**
+#### Part A: Anatomy (20 pts)
+* **All 6 functional regions present (12 pts):** Dendrites, Soma, Axon Hillock, Axon, Synapse, Membrane.
+* **Accurate functional placement (5 pts):** Threshold trigger labeled at the axon hillock/soma junction, not on dendrites.
+* **Clarity (3 pts):** Legible diagram or digital drawing.
+
+#### Part B: Qualitative Voltage Trace (30 pts)
+* **Key phases identified (20 pts):** Resting baseline ($V_{reset}$), integration curve, horizontal threshold ($V_{th}$), instantaneous spike, refractory reset.
+* **Two full cycles depicted (5 pts):** Demonstrates understanding of repeatable integration cycles.
+* **Qualitative accuracy (5 pts):** Convex exponential trajectory, not a purely straight linear line.
+
+#### Part C: Conceptual Questions (50 pts)
+* **Q1 (15 pts) — The Leak:** Full marks for explaining that the leak represents passive ion diffusion through resting channels pulling $V$ toward $V_{reset}$. Without a leak, the neuron becomes a perfect accumulator with infinite memory of past inputs.
+* **Q2 (15 pts) — Neuromorphic Bridge:** Full marks for linking biological sparsity or event-driven signaling to reduced static/dynamic power dissipation in digital hardware.
+* **Q3 (20 pts) — Current Doubling:** Full marks for noting: (a) Inter-spike interval decreases (faster firing), (b) Spike amplitude remains unchanged (all-or-none digital event), and (c) Integration slope becomes steeper.
+
+---
+
+### Module 2 (`W1D2`) — Python LIF Reference Modeling
+
+#### Part A: Python Class Implementation (50 pts)
 
 ```python
 import numpy as np
 
 class LIFNeuron:
-    def __init__(self, tau, V_th, V_reset, dt=1.0):
+    def __init__(self, tau=20.0, V_th=-55.0, V_reset=-70.0, dt=0.5):
         self.tau = tau
         self.V_th = V_th
         self.V_reset = V_reset
@@ -77,183 +54,126 @@ class LIFNeuron:
         self.V = V_reset
 
     def step(self, I_in):
+        # Discrete-time Euler update rule
         dV = (self.dt / self.tau) * (-(self.V - self.V_reset) + I_in)
         self.V += dV
-        
+
         if self.V >= self.V_th:
             spike = 1
             self.V = self.V_reset
         else:
             spike = 0
-            
+
         return self.V, spike
 
     def reset_state(self):
         self.V = self.V_reset
 ```
 
-Part B — Plot (30 pts)
+* **Mathematical correctness (20 pts):** Correct formulation of discrete decay and current injection.
+* **Threshold & reset logic (15 pts):** Returns spike flag and correctly resets membrane state.
+* **State persistence (10 pts):** Membrane state persists across sequential calls to `step()`.
+* **Clean interface (5 pts):** Matches required arguments and return signatures.
 
-| Criterion                       | What we look for                                     | Points     |
-| :------------------------------ | :--------------------------------------------------- | :--------- |
-| **Single-current plot correct** | V trace visible, threshold annotated, spikes present | **10 pts** |
-| **Three-current comparison**    | All three traces on same axes, legend included       | **10 pts** |
-| **Qualitative match to Task 1** | Plot shape matches voltage trace from Task 1 sketch  | **10 pts** |
+#### Part B: Plots (30 pts)
+* Single-current trace plotted with threshold line (10 pts).
+* Multi-current traces ($I \in \{1.0, 2.0, 4.0\}$) on shared axes with legend (10 pts).
+* Matches qualitative expectations from Module 1 (10 pts).
 
-Part C — Written questions (20 pts)
+#### Part C: Analytical Questions (20 pts)
+* **Q1 (10 pts):** Identifies non-linear compression in $f\text{-}I$ curve caused by the leak opposing incoming current as $V$ approaches threshold.
+* **Q2 (10 pts):** Recognizes that removing the leak results in a non-decaying perfect integrator.
 
-Q1 model answer — spike rate vs current
-Spike rate does not increase linearly with current. At low currents the neuron
-may not spike at all (sub-threshold). Above threshold, rate increases with
-current but the relationship is nonlinear due to the leak term — as V rises
-toward threshold, the leak current -(V - V_reset) partially cancels I_in,
-slowing the ramp. This is the f-I curve of the LIF model.
+---
 
-Q2 model answer — removing the leak
-Without the leak term, dV = dt/tau * I_in. The neuron becomes a perfect
-integrator — V increases monotonically as long as I_in > 0 and never decays. It
-would still fire, but it would remember all past input with no forgetting.
-Biologically implausible: real neurons are sensitive to recent input, not total
-past input.
+### Module 3 (`W1D3`) — Digital Logic Mapping & Bit-Width Analysis
 
-Task 3 rubric — Map the logic
+#### Part A: Logic Mapping Key (40 pts)
+* `V >= V_th` $\rightarrow$ Digital Comparator (8 pts).
+* `V = V_reset` on spike $\rightarrow$ Multiplexer / MUX (8 pts).
+* `return spike` $\rightarrow$ Output single-bit register/wire (8 pts).
+* State retention $\rightarrow$ D Flip-Flop register bank (8 pts).
+* Correct identification of subtractor and accumulator adders (8 pts).
 
-Part A — Mapping table (40 pts) — answer key
+#### Part B: Block Diagram (30 pts)
+* All 5 components correctly identified (15 pts).
+* Signal routing accurate (`I_in` into adder, comparator driving MUX select) (10 pts).
+* Clock and synchronous reset clearly wired to register (5 pts).
 
-| Criterion                    | What we look for                                     | Points     |
-| :--------------------------- | :--------------------------------------------------- | :--------- |
-| **`V >= V_th`**              | Comparator                                           | **8 pts**  |
-| **`V = V_reset` (on spike)** | Multiplexer (selects V\_reset when comparator fires) | **8 pts**  |
-| **`return spike`**           | Register output / wire                               | **4 pts**  |
-| **Store V between steps**    | D flip-flop / register (clocked storage)             | **8 pts**  |
-| **Partial credit**           | Subtractor, adder described correctly                | **12 pts** |
+#### Part C: Quantization & Bit-Shift Analysis (30 pts)
+* **Q1 (15 pts) — Bit Width:** Range $= 40\,\text{mV}$, resolution $= 0.1\,\text{mV} \rightarrow \text{Steps} = 400$. $N = \lceil\log_2(400)\rceil = 9$ bits minimum for integer state; full marks for reasonable fixed-point allocations ($12$ to $16$ bits total).
+* **Q2 (15 pts) — Bit-Shift Approximation:** $\frac{\Delta t}{\tau} = \frac{0.5}{20} = 0.025$. Nearest power-of-2 shift is $\frac{1}{32} = 0.03125$ (`>> 5`). Error: $\frac{0.03125 - 0.025}{0.025} = +25\%$. The hardware neuron will leak faster and fire slightly faster than the software model.
 
-Part B — Block diagram (30 pts)
+---
 
-| Criterion                         | What we look for                                                    | Points     |
-| :-------------------------------- | :------------------------------------------------------------------ | :--------- |
-| **All 5 component types present** | Subtractor, adder/accumulator, comparator, mux, register            | **15 pts** |
-| **Data flow correct**             | `I_in` → adder → mux → register → `V`; comparator drives mux select | **10 pts** |
-| **Clock and reset shown**         | Clock to register; reset forcing `V_RESET` through mux              | **5 pts**  |
+### Module 4 (`W1D4`) — Verilog Hardware Description
 
-Part C — Bit width (30 pts) — model answers
+#### Part A: RTL Implementation (`lif_neuron.v`) (60 pts)
 
-Q1 — bit width calculation
-Range = -40 - (-70) = 30 mV. Resolution = 0.5 mV. Steps needed = 30 / 0.5 = 60.
-bits = ceil(log2(60)) = 6 bits for the fractional part. However, signed
-representation and fractional bits for the intermediate dV calculation require
-~16 bits total. Full marks for any well-reasoned answer in the range of 8–16
-bits with correct working.
+```verilog
+`timescale 1ns / 1ps
 
-Q2 — bit-shift approximation
-dt/tau = 0.5/20 = 0.025. Closest power-of-2 approximations: 1/32 = 0.03125
-(right-shift by 5), 1/64 = 0.015625 (right-shift by 6). Using 1/32 introduces an
-error of (0.03125-0.025)/0.025 = 25%. The neuron will fire ~25% faster than the
-Python model. This is the main source of discrepancy participants will observe
-in Task 6.
+module lif_neuron #(
+    parameter WIDTH   = 16,
+    parameter V_TH    = 16'd3800,
+    parameter V_RESET = 16'd0,
+    parameter TAU_INV = 5
+) (
+    input  wire              clk,
+    input  wire              rst,
+    input  wire [WIDTH-1:0]  I_in,
+    output reg  [WIDTH-1:0]  V_out,
+    output reg               spike
+);
 
-Task 4 rubric — Write the spec
+    reg [WIDTH-1:0] V_mem;
 
-Part A — lif_chip_spec.md (70 pts)
+    always @(posedge clk) begin
+        if (rst) begin
+            V_mem <= V_RESET;
+            V_out <= V_RESET;
+            spike <= 1'b0;
+        end else begin
+            if (V_mem >= V_TH) begin
+                spike <= 1'b1;
+                V_mem <= V_RESET;
+                V_out <= V_RESET;
+            end else begin
+                spike <= 1'b0;
+                V_mem <= V_mem + I_in - ((V_mem - V_RESET) >> TAU_INV);
+                V_out <= V_mem;
+            end
+        end
+    end
 
-| Criterion                         | What we look for                                                | Points     |
-| :-------------------------------- | :-------------------------------------------------------------- | :--------- |
-| **Module overview complete**      | Describes purpose, not just restates the title                  | **10 pts** |
-| **Port table complete**           | All 5 required ports with correct direction, width, description | **20 pts** |
-| **Internal registers listed**     | `V_mem` at minimum; initial value and width specified           | **15 pts** |
-| **Behaviour pseudocode complete** | Reset, update, threshold, mux, spike all covered                | **25 pts** |
+endmodule
+```
 
-Part B — Self-review (30 pts)
+* Synthesizable sequential architecture (20 pts).
+* Correct non-blocking (`<=`) assignments inside clocked block (15 pts).
+* Parameterized bit-width and threshold registers (15 pts).
+* Synchronous reset handling (10 pts).
 
-| Criterion                           | What we look for                                  | Points    |
-| :---------------------------------- | :------------------------------------------------ | :-------- |
-| **Q1: all signals have widths**     | No signal left undefined                          | **8 pts** |
-| **Q2: reset behaviour specified**   | `V` value on cycle after `rst` goes low is stated | **8 pts** |
-| **Q3: I\_in+rst conflict handled**  | Specifies priority (`rst` wins, or both applied)  | **7 pts** |
-| **Q4: implementability assessment** | Honest identification of any ambiguous section    | **7 pts** |
+#### Part B: Lint Check (20 pts)
+* Clean execution under `verilator --lint-only -Wall` with zero warnings (20 pts). ($-5$ pts per unresolved width or blocking assignment warning).
 
-Common mistakes
+#### Part C: Conceptual Questions (20 pts)
+* **Q1 (10 pts):** `reg` holds state across clock edges (flip-flop memory), while `wire` is continuous combinational routing.
+* **Q2 (10 pts):** Blocking (`=`) executes sequentially, creating race conditions and unintended combinational latches in hardware simulation.
 
-  - Forgetting to specify signal widths for I_in — it must have a defined bit
-    width
-  - Behaviour section says "compare V to threshold" without specifying what
-    happens next
-  - Spike output described as persistent (stays high) rather than single-cycle
+---
 
-Task 5 rubric — Implement in Verilog
+### Module 5 (`W1D5`) — Simulation & Parity Verification
 
-Part A — Implementation (60 pts)
+#### Part A: Testbench Execution (40 pts)
+* Successful compilation and execution of `tb_lif_neuron.cpp` / Python testbench in Colab (20 pts).
+* Clean `wave.csv` or `.vcd` trace generated (20 pts).
 
-| Criterion                        | What we look for                                     | Points     |
-| :------------------------------- | :--------------------------------------------------- | :--------- |
-| **Register declaration correct** | `V_mem` declared as `reg` with correct width         | **10 pts** |
-| **Reset logic correct**          | `rst` sets `V_mem` to `V_RESET`, `spike` to 0        | **10 pts** |
-| **LIF update implemented**       | `dV` computed and added to `V_mem` each cycle        | **20 pts** |
-| **Threshold + reset logic**      | Spike asserted for 1 cycle; `V_mem` set to `V_RESET` | **15 pts** |
-| **`V_out` assigned correctly**   | `V_out` reflects `V_mem` (continuous or registered)  | **5 pts**  |
+#### Part B: Waveform Visualization (30 pts)
+* Matplotlib waveform plot displaying `clk`, `rst`, `I_in`, `V_out`, and `spike` (15 pts).
+* Measured Inter-Spike Interval (ISI) in clock cycles (15 pts).
 
-Part B — Lint clean (20 pts)
-
-| Criterion          | What we look for                             | Points             |
-| :----------------- | :------------------------------------------- | :----------------- |
-| **Zero warnings**  | `verilator --lint-only -Wall` passes cleanly | **20 pts**         |
-| **Partial credit** | Each unresolved warning costs 5 pts          | **−5 per warning** |
-
-Part C — Written questions (20 pts)
-
-Q1 model answer — reg vs wire
-A reg holds a value across clock edges — it is a storage element. A wire is a
-combinational connection — its value is always driven by whatever is currently
-connected to it. V_mem must be a reg because it needs to hold the membrane
-potential between clock cycles. A wire cannot do this — it has no memory.
-
-Q2 model answer — blocking vs non-blocking
-With = (blocking), assignments execute in order within the always block — a
-later assignment can see the result of an earlier one in the same time step.
-This creates combinational behaviour inside a sequential block, which in
-simulation produces race conditions: the order of statements in the source file
-affects the result. With <= (non-blocking), all right-hand sides are evaluated
-first, then all left-hand sides are updated simultaneously at the clock edge —
-matching real flip-flop behaviour.
-
-Task 6 rubric — Simulate and verify
-
-Part A — Testbench (40 pts)
-
-| Criterion                         | What we look for                                                      | Points     |
-| :-------------------------------- | :-------------------------------------------------------------------- | :--------- |
-| **Testbench compiles**            | `make` succeeds without errors                                        | **10 pts** |
-| **Passing run achieved**          | `PASS` message with cycle number, OR documented `FAIL` with diagnosis | **20 pts** |
-| **Terminal screenshot submitted** | Discord post includes screenshot                                      | **10 pts** |
-
-Part B — Waveform (30 pts)
-
-| Criterion                       | What we look for                                              | Points     |
-| :------------------------------ | :------------------------------------------------------------ | :--------- |
-| **Waveform screenshot correct** | All 5 signals visible: `clk`, `rst`, `I_in`, `V_out`, `spike` | **10 pts** |
-| **ISI measured correctly**      | Correct clock cycle count between spikes                      | **10 pts** |
-| **`V_out` shape described**     | Reset, ramp, and spike visible and correctly described        | **10 pts** |
-
-Part C — HW vs Python comparison (30 pts)
-
-| Criterion                    | What we look for                                   | Points     |
-| :--------------------------- | :------------------------------------------------- | :--------- |
-| **ISI comparison attempted** | Python simulation run with same parameters         | **10 pts** |
-| **Error quantified**         | Percentage difference calculated and stated        | **10 pts** |
-| **Root cause identified**    | Bit-shift approximation identified as likely cause | **5 pts**  |
-| **Reflection quality**       | 150–200 words, all four bullet points addressed    | **5 pts**  |
-
-Expected results (for facilitator reference)
-
-With the default parameters (I_in=200, TAU_INV=5 i.e. right-shift-by-5) the
-expected ISI is approximately 180–220 clock cycles. The Python model with
-equivalent parameters will give ~240 timesteps. The ~25% discrepancy is expected
-and is the correct answer to the root-cause question.
-
-If a participant's hardware fires significantly faster or slower than this
-range, the most likely causes are: (1) incorrect fixed-point encoding of V_RESET
-or V_TH parameters, (2) V_out not resetting to V_RESET after spike, or (3) the
-update equation applying dt/tau incorrectly.
-
-Open Neuromorphic | Zero to Silicon | Facilitator Edition | Not for participant
-distribution
+#### Part C: Hardware vs. Software Parity (30 pts)
+* Correct measurement of hardware ISI (~180–220 clock cycles) and Python ISI (~240 timesteps) (10 pts).
+* Correct calculation of percentage discrepancy ($\approx 20\text{–}25\%$) (10 pts).
+* Correct attribution of error to the $\frac{1}{32}$ bit-shift decay approximation and quantization (10 pts).
