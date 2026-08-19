@@ -64,7 +64,7 @@ HW vs SW % Error             Waveform Plots                Synthesizable Module
 ### Module Details
 
 #### Module 1 (`W1D1`) — Biological & Conceptual Foundations
-* **Lead Contributors:** Rayane Rocha (`@peppermintcollie`), Bells (`@belleion_potatos`)
+* **Lead Contributors:** Rayane Rocha (`@peppermintcollie`), Bells
 * **Objective:** Establish the biophysical intuitions and mathematical vocabulary that govern neuromorphic engineering. Participants understand why leaky integration and discrete spike events provide extreme energy efficiency over traditional architectures.
 * **Topics Covered:**
   * Neurons as dynamical systems: membrane potential ($V$), resting potential ($V_{reset}$), leak conductance, threshold ($V_{th}$).
