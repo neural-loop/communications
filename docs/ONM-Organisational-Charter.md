@@ -26,7 +26,7 @@ ONM is led by a **Core Leadership Team** composed of three officers:
 
 * **Secretary**: Maintains records, documents meetings, manages internal communication, and facilitates elections and administrative processes.
 
-Each officer serves a **1-year term**, with new elections taking place at the conclusion of each term. Officers may be re-elected. Officers are elected from the ONM Voting Members pool.
+Each officer serves a **1-year term**, with new elections taking place at the conclusion of each term. Officers may be re-elected. Officers are elected from the ONM Voting Members.
 
 ## Membership
 
