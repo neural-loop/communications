@@ -18,7 +18,7 @@ ONM exists to:
 
 ONM operates as a non-profit organization and surplus cannot be distributed to members, officers, or external parties. Any surplus revenue shall be reserved for future operations or reinvested in activities aligned with the purpose of ONM.
 
-Core ONM resources, including software, documentation, datasets, and educational materials, shall remain freely accessible under open-source licenses. Community infrastructure managed by ONM (websites, communication platforms, repositories, etc.) shall be available to all participants and initiatives aligned with the purpose of ONM without access fees. Resource allocation decisions shall be based on mission alignment, community benefit, and operational capacity, not on commercial funding or ability to pay.
+Core ONM resources, including software, documentation, datasets, and educational materials, shall remain freely accessible under [open-source licenses](https://github.com/open-neuromorphic/communications/blob/main/docs/policies/open-definition.md). Community infrastructure managed by ONM (websites, communication platforms, repositories, etc.) shall be available to all participants and initiatives aligned with the purpose of ONM without access fees. Resource allocation decisions shall be based on mission alignment, community benefit, and operational capacity, not on commercial funding or ability to pay.
 
 ## Governance Structure
 
